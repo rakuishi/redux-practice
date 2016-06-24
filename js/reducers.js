@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux'
-import { ADD_TODO } from './actions'
+import { ADD_TODO, COMPLETE_TODO } from './actions'
 
 let initState = [
   {
     id: 0,
-    text: 'Hello, Redux with React.js!'
+    text: 'Hello, Redux with React.js!',
+    completed: false
   }
 ]
 
@@ -17,9 +18,20 @@ function todoList(state = initState, action) {
         ...state,
         {
           id: action.id,
-          text: action.text
+          text: action.text,
+          completed: false,
         }
       ]
+    case COMPLETE_TODO:
+     return state.map((todo, index) => {
+        if (action.id === index) {
+          // Copy the object before mutating
+          return Object.assign({}, todo, {
+            completed: !action.completed
+          })
+        }
+        return todo
+      })
     default:
       return state
   }

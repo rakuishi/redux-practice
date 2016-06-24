@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addTodo } from './actions'
+import { addTodo, completeTodo } from './actions'
 
 class TodoList extends Component {
   handleSubmit(e) {
@@ -13,7 +13,24 @@ class TodoList extends Component {
     this.refs.todoTextInput.value = ''
   }
 
+  handleClick(todo) {
+    this.props.dispatch(completeTodo(todo.id, todo.completed))
+  }
+
   render() {
+    var rows = []
+    this.props.state.todoList.map((todo) => {
+      if (todo.completed) {
+        rows.push(
+          <li key={todo.id} onClick={this.handleClick.bind(this, todo)} className="completed">{todo.text}</li>
+        )
+      } else {
+        rows.push(
+          <li key={todo.id} onClick={this.handleClick.bind(this, todo)}>{todo.text}</li>
+        )
+      }
+    })
+
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit.bind(this)}>
@@ -34,12 +51,8 @@ class TodoList extends Component {
             </div>
           </div>
         </form>
-        <ul>
-          {this.props.state.todoList.map((todo) =>
-            <li key={todo.id}>
-              {todo.text}
-            </li>
-          )}
+        <ul className="todo-list">
+          {rows}
         </ul>
       </div>
     )

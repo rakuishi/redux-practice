@@ -1,3 +1,13 @@
 .container {
   padding: 40px 20px;
 }
+
+.todo-list li {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.todo-list li.completed {
+  text-decoration: line-through;
+  list-style: disc inside;
+}

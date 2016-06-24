@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.addTodo = addTodo;
+exports.completeTodo = completeTodo;
 var ADD_TODO = exports.ADD_TODO = 'ADD_TODO';
+var COMPLETE_TODO = exports.COMPLETE_TODO = 'COMPLETE_TODO';
 
 var todoId = 1;
 
@@ -14,6 +16,14 @@ function addTodo(text) {
     type: ADD_TODO,
     id: todoId++,
     text: text
+  };
+}
+
+function completeTodo(id, completed) {
+  return {
+    type: COMPLETE_TODO,
+    id: id,
+    completed: completed
   };
 }
 
@@ -92,8 +102,32 @@ var TodoList = function (_Component) {
       this.refs.todoTextInput.value = '';
     }
   }, {
+    key: 'handleClick',
+    value: function handleClick(todo) {
+      this.props.dispatch((0, _actions.completeTodo)(todo.id, todo.completed));
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var rows = [];
+      this.props.state.todoList.map(function (todo) {
+        if (todo.completed) {
+          rows.push(_react2.default.createElement(
+            'li',
+            { key: todo.id, onClick: _this2.handleClick.bind(_this2, todo), className: 'completed' },
+            todo.text
+          ));
+        } else {
+          rows.push(_react2.default.createElement(
+            'li',
+            { key: todo.id, onClick: _this2.handleClick.bind(_this2, todo) },
+            todo.text
+          ));
+        }
+      });
+
       return _react2.default.createElement(
         'div',
         { className: 'container' },
@@ -125,14 +159,8 @@ var TodoList = function (_Component) {
         ),
         _react2.default.createElement(
           'ul',
-          null,
-          this.props.state.todoList.map(function (todo) {
-            return _react2.default.createElement(
-              'li',
-              { key: todo.id },
-              todo.text
-            );
-          })
+          { className: 'todo-list' },
+          rows
         )
       );
     }
@@ -165,7 +193,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var initState = [{
   id: 0,
-  text: 'Hello, Redux with React.js!'
+  text: 'Hello, Redux with React.js!',
+  completed: false
 }];
 
 function todoList() {
@@ -178,8 +207,19 @@ function todoList() {
       // Never mutate reducer arguments
       return [].concat(_toConsumableArray(state), [{
         id: action.id,
-        text: action.text
+        text: action.text,
+        completed: false
       }]);
+    case _actions.COMPLETE_TODO:
+      return state.map(function (todo, index) {
+        if (action.id === index) {
+          // Copy the object before mutating
+          return Object.assign({}, todo, {
+            completed: !action.completed
+          });
+        }
+        return todo;
+      });
     default:
       return state;
   }
