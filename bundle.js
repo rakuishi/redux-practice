@@ -104,7 +104,7 @@ var TodoList = function (_Component) {
   }, {
     key: 'handleClick',
     value: function handleClick(todo) {
-      this.props.dispatch((0, _actions.completeTodo)(todo.id, todo.completed));
+      this.props.dispatch((0, _actions.completeTodo)(todo.id, !todo.completed));
     }
   }, {
     key: 'render',
@@ -215,7 +215,7 @@ function todoList() {
         if (action.id === index) {
           // Copy the object before mutating
           return Object.assign({}, todo, {
-            completed: !action.completed
+            completed: action.completed
           });
         }
         return todo;

@@ -14,7 +14,7 @@ class TodoList extends Component {
   }
 
   handleClick(todo) {
-    this.props.dispatch(completeTodo(todo.id, todo.completed))
+    this.props.dispatch(completeTodo(todo.id, !todo.completed))
   }
 
   render() {

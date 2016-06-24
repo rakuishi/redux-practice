@@ -27,7 +27,7 @@ function todoList(state = initState, action) {
         if (action.id === index) {
           // Copy the object before mutating
           return Object.assign({}, todo, {
-            completed: !action.completed
+            completed: action.completed
           })
         }
         return todo
