@@ -2,7 +2,7 @@
   "name": "redux-practice",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./js/app.js",
   "scripts": {
     "start": "php -S localhost:8080 -t . & open http://localhost:8080/ & watchify -t babelify ./js/app.js -o ./bundle.js"
   },
